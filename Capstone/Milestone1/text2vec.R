@@ -24,9 +24,12 @@ vocab = create_vocabulary(it_token_par,stopwords = as.vector(bad_words$V1))
 print(difftime(Sys.time(),t1,units = 'sec'))
 
 
-z<-vocab %>% arrange(desc(term_count)) %>% mutate(rank=row_number(),term_frequency=term_count/sum(term_count))
-z %>% ggplot(aes(rank, term_frequency),options(scipen=999)) +
-        geom_line(size = 1.1, alpha = 0.8, show.legend = FALSE) #+
+freq_tab<-vocab %>% 
+        arrange(desc(term_count)) %>% 
+        mutate(rank=row_number(),term_frequency=term_count/sum(term_count))
+        
+freq_tab %>% ggplot(aes(rank, term_frequency)) +
+        geom_line(size = 1.1, alpha = 0.8, show.legend = FALSE) +
         scale_x_log10(labels = function(x) format(x, scientific = FALSE)) +
         scale_y_log10(labels = function(x) format(x, scientific = FALSE))
 
