@@ -4,20 +4,26 @@ library(quanteda)
 library(tm)
 library(tidytext)
 library(tidyverse)
+library(data.table)
+library(MODIS)
 ##files' length
 en_files <- list.files("/data/final/en_US/")
 nlines<-numeric()
+size<-numeric()
 for (i in 1:3){
         con <- file(paste0("/data/final/en_US/",en_files[i]), open = "rb")
         nlines[i] <- length(readLines(con,skipNul = TRUE))
         close(con)
+        size[i]<-fileSize(paste0("/data/final/en_US/",en_files[i]),units = "MB")
 }
+
+LinesNumber <- data.table(file=en_files,lines= nlines,file.size=size)
 
 
 chunk <- function(x, n) split(x, sort(rank(x) %% n))
 chunks <- chunk(1:nlines[1],20)
 
-blogs <- data.frame()
+blogs <- data.table()
 
 for (i in 1:length(chunks)){
 con <- file(paste0("/data/final/en_US/",en_files[1]), open = "rb")
