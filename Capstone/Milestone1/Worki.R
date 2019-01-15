@@ -8,10 +8,11 @@ library(tidyverse)
 en_files <- list.files("/data/final/en_US/")
 nlines<-numeric()
 for (i in 1:3){
-        con <- file(paste0("/data/final/en_US/",en_files[i]), open = "r")
+        con <- file(paste0("/data/final/en_US/",en_files[i]), open = "rb")
         nlines[i] <- length(readLines(con,skipNul = TRUE))
         close(con)
 }
+
 
 chunk <- function(x, n) split(x, sort(rank(x) %% n))
 chunks <- chunk(1:nlines[1],20)
@@ -19,7 +20,7 @@ chunks <- chunk(1:nlines[1],20)
 blogs <- data.frame()
 
 for (i in 1:length(chunks)){
-con <- file(paste0("/data/final/en_US/",en_files[1]), open = "r")
+con <- file(paste0("/data/final/en_US/",en_files[1]), open = "rb")
         tData_blogs <-readLines(con,skipNul = TRUE)[chunks[[i]]]
 close(con)        
         
